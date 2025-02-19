@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechLogix - Inicio</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5; /* Paleta de colores */
+    }
+    .header-container {
+      background-color: #34495e; /* Paleta de colores */
+      display: flex;
+      justify-content: flex-end; /* Barra de búsqueda y carrito a la derecha */
+      align-items: center;
+      padding: 15px 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .search-login {
+      display: flex;
+      align-items: center;
+    }
+    .search-login input[type="text"] {
+      padding: 8px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .search-login button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      background-color: #e53935;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+    .search-login button:hover {
+      background-color: #d32f2f;
+    }
+    .cart {
+      margin-left: 15px;
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    }
+    /* Sección Hero */
+    .hero { 
+      background-color: #34495e;
+      color: white;
+      padding: 60px 0;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    /* Contenido principal */
+    .container {
+      padding: 20px;
+    }
+    /* Sección de Productos */
+    .products {
+      margin-bottom: 40px;
+    }
+    .products h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+    .product-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+    .product-header select {
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .product-header select:hover {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .product-card {
+      background-color: white;
+      border: 1px solid #ddd;
+      padding: 20px;
+      text-align: center;
+      width: calc(33.333% - 20px);
+      box-sizing: border-box;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    .product-card h3 {
+      font-size: 18px;
+      color: #333;
+      margin: 10px 0;
+    }
+    .price {
+      font-size: 16px;
+      color: #d32f2f;
+    }
+    .old-price {
+      text-decoration: line-through;
+      color: #999;
+    }
+    /* Botones de Añadir/Contratar */
+    .product-card form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .product-card input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+    .product-card button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background-color: #597c80;  /* Azul de la paleta */
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .product-card button:hover {
+      background-color: #3d6064;  /* Azul oscuro en hover */
+      transform: scale(1.05);
+    }
+    /* Sección de Servicios */
+    .services h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+    }
+    .service-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .product-card {
+        width: calc(50% - 20px);
+      }
+    }
+    @media (max-width: 480px) {
+      .product-card {
+        width: 100%;
+      }
+    }
+    /* Footer */
+    .footer { 
+      background-color: #34495e; 
+      padding: 20px; 
+      color: white; 
+      text-align: center; 
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado -->
+  <header>
+    <div class="header-container">
+      <div class="search-login">
+        <form action="{#}" method="get">
+          <input type="text" name="query" placeholder="Buscar" value="{{ request.GET.query }}">
+          <button type="submit">Buscar</button>
+        </form>
+        <a href="{% url 'carrito' %}" class="btn btn-primary">Carrito</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sección Hero -->
+  <section class="hero">
+    <h1>Bienvenido a TechLogix</h1>
+    <p>Optimiza la gestión de tu negocio con nuestra plataforma tecnológica</p>
+  </section>
+
+  <!-- Contenido principal -->
+  <main>
+    <div class="container">
+      <!-- Sección de Productos -->
+      <section class="products">
+        <h2>Productos</h2>
+        <div class="product-header">
+          <select id="sortSelect">
+            <option value="random">Ordenar al azar</option>
+            <option value="priceAsc">Precio ascendente</option>
+            <option value="priceDesc">Precio descendente</option>
+          </select>
+        </div>
+        <div class="product-grid" id="productGrid">
+          {% for producto in productos %}
+          <div class="product-card" data-price="{{ producto.precio }}">
+            <h3>{{ producto.nombre }}</h3>
+            <p>{{ producto.descripcion }}</p>
+            <p class="price">${{ producto.precio }}</p>
+            <!-- Formulario para agregar al carrito -->
+            <form method="post" action="{% url 'agregar_al_carrito' producto.id_producto %}">
+              {% csrf_token %}
+              <label for="cantidad_{{ producto.id_producto }}">Cantidad:</label>
+              <input type="number" id="cantidad_{{ producto.id_producto }}" name="cantidad" min="1" max="{{ producto.cant_producto }}" value="1">
+              <button type="submit">Añadir al carrito</button>
+            </form>
+          </div>
+          {% empty %}
+          <p>No se encontraron productos.</p>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- Sección de Servicios -->
+      <section class="services">
+        <h2>Servicios</h2>
+        <div class="service-grid" id="serviceGrid">
+          {% for servicio in servicios %}
+          <div class="product-card" data-price="{{ servicio.precio }}">
+            <h3>{{ servicio.nombre }}</h3>
+            <p>{{ servicio.descripcion }}</p>
+            <p class="price">${{ servicio.precio }}</p>
+            <!-- Formulario para contratar el servicio -->
+            <form method="post" action="{#}">
+              {% csrf_token %}
+              <label for="cantidad_servicio_{{ servicio.id_servicio }}">Cantidad:</label>
+              <input type="number" id="cantidad_servicio_{{ servicio.id_servicio }}" name="cantidad" min="1" value="1">
+              <button type="submit">Contratar servicio</button>
+            </form>
+          </div>
+          {% empty %}
+          <p>No se encontraron servicios.</p>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2024 TechLogix - Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    document.getElementById('sortSelect').addEventListener('change', function() {
+      const sortValue = this.value;
+      const productGrid = document.getElementById('productGrid');
+      const productCards = Array.from(productGrid.getElementsByClassName('product-card'));
+
+      productCards.sort((a, b) => {
+        const priceA = parseFloat(a.getAttribute('data-price'));
+        const priceB = parseFloat(b.getAttribute('data-price'));
+
+        if (sortValue === 'priceAsc') {
+          return priceA - priceB;
+        } else if (sortValue === 'priceDesc') {
+          return priceB - priceA;
+        } else {
+          return Math.random() - 0.5;
+        }
+      });
+
+      productCards.forEach(card => productGrid.appendChild(card));
+    });
+  </script>
+</body>
+</html>

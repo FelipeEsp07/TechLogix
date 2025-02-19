@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Usuario, Rol
+from .models import Usuario, Rol, Producto, Servicio, Carrito, ItemCarrito
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.dateparse import parse_date
@@ -44,7 +44,7 @@ def login_clientes(request):
         if usuario is not None:
             request.session['usuario_id'] = usuario.id
             request.session['cedula_cliente'] = usuario.cedula  
-            return redirect('') 
+            return redirect('inicio') 
         else:
             messages.error(request, "Credenciales inválidas")
 
@@ -108,3 +108,165 @@ def reg_clientes(request):
 
     return render(request, 'reg_clientes.html')
 
+def inicio(request):
+
+    if not request.session.get('usuario_id'):
+        return redirect('login_clientes')
+    
+    productos = Producto.objects.all()
+    servicios = Servicio.objects.all()
+    
+    context = {
+        'productos': productos,
+        'servicios': servicios,
+    }
+    return render(request, 'inicio.html', context)
+
+def reg_productos(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        cant_producto = request.POST.get('cant_producto')
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        
+        errores = []
+        
+        if not nombre:
+            errores.append("El nombre es obligatorio.")
+        if not cant_producto:
+            errores.append("La cantidad es obligatoria.")
+        else:
+            try:
+                cant_producto = int(cant_producto)
+                if cant_producto < 0:
+                    errores.append("La cantidad no puede ser negativa.")
+            except ValueError:
+                errores.append("La cantidad debe ser un número entero.")
+        if not descripcion:
+            errores.append("La descripción es obligatoria.")
+        if not precio:
+            errores.append("El precio es obligatorio.")
+        else:
+            try:
+                precio = float(precio)
+                if precio < 0:
+                    errores.append("El precio no puede ser negativo.")
+            except ValueError:
+                errores.append("El precio debe ser un número válido.")
+        
+        if errores:
+            for error in errores:
+                messages.error(request, error)
+            return redirect('reg_productos')
+        
+        nuevo_producto = Producto(
+            nombre=nombre,
+            cant_producto=cant_producto,
+            descripcion=descripcion,
+            precio=precio
+        )
+        nuevo_producto.save()
+        messages.success(request, 'Producto registrado exitosamente.')
+        return redirect('inicio') 
+    
+    return render(request, 'reg_productos.html')
+
+def reg_servicios(request):
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        
+        errores = []
+        
+        if not nombre:
+            errores.append("El nombre es obligatorio.")
+        if not descripcion:
+            errores.append("La descripción es obligatoria.")
+        if not precio:
+            errores.append("El precio es obligatorio.")
+        else:
+            try:
+                precio = float(precio)
+                if precio < 0:
+                    errores.append("El precio no puede ser negativo.")
+            except ValueError:
+                errores.append("El precio debe ser un número válido.")
+        
+        if errores:
+            for error in errores:
+                messages.error(request, error)
+            return redirect('reg_servicios')
+        
+        nuevo_servicio = Servicio(
+            nombre=nombre,
+            descripcion=descripcion,
+            precio=precio
+        )
+        nuevo_servicio.save()
+        messages.success(request, 'Servicio registrado exitosamente.')
+        return redirect('inicio') 
+    
+    return render(request, 'reg_servicios.html')
+
+def agregar_al_carrito(request, id_producto):
+    if request.method == 'POST':
+        if not request.session.get('usuario_id'):
+            messages.error(request, "Debes iniciar sesión para agregar productos al carrito.")
+            return redirect('login_clientes')
+        
+        try:
+            producto = Producto.objects.get(id_producto=id_producto)
+        except Producto.DoesNotExist:
+            messages.error(request, "El producto no existe.")
+            return redirect('inicio')
+        
+        try:
+            cantidad = int(request.POST.get('cantidad', 1))
+        except ValueError:
+            messages.error(request, "Cantidad inválida.")
+            return redirect('inicio')
+        
+        if cantidad < 1:
+            messages.error(request, "La cantidad debe ser al menos 1.")
+            return redirect('inicio')
+        
+        usuario = Usuario.objects.get(id=request.session['usuario_id'])
+        carrito, created = Carrito.objects.get_or_create(usuario=usuario)
+        
+        item, created_item = ItemCarrito.objects.get_or_create(carrito=carrito, producto=producto, defaults={'cantidad': cantidad})
+        if not created_item:
+            item.cantidad += cantidad
+            item.save()
+        
+        messages.success(request, "Producto añadido al carrito.")
+        return redirect('inicio')
+    else:
+        return redirect('inicio')
+    
+def ver_carrito(request):
+    if not request.session.get('usuario_id'):
+        messages.error(request, "Debes iniciar sesión para ver el carrito.")
+        return redirect('login_clientes')
+    
+    usuario = Usuario.objects.get(id=request.session['usuario_id'])
+    carrito, created = Carrito.objects.get_or_create(usuario=usuario)
+    total_items = sum(item.cantidad for item in carrito.items.all())
+    
+    context = {
+        'carrito': carrito,
+        'total_items': total_items,
+    }
+    return render(request, 'carrito.html', context)
+
+def eliminar_item_carrito(request, item_id):
+    if request.method == 'POST':
+        try:
+            item = ItemCarrito.objects.get(id=item_id)
+            item.delete()
+            messages.success(request, "Producto eliminado del carrito.")
+        except ItemCarrito.DoesNotExist:
+            messages.error(request, "El producto no existe en el carrito.")
+    else:
+        messages.error(request, "Acción no permitida.")
+    return redirect('carrito')
