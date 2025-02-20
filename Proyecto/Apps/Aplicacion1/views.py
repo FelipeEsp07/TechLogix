@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Usuario, Rol, Producto, Servicio, Carrito, ItemCarrito
+from .models import Usuario, Rol, Producto, Servicio, Carrito, ItemCarrito, Cotizacion
 from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils.dateparse import parse_date
-from datetime import datetime
+from datetime import datetime, time
+from django.utils.dateparse import parse_date
 
 def home(request):
     return render(request, 'home.html')
@@ -174,24 +175,13 @@ def reg_productos(request):
 def reg_servicios(request):
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
-        descripcion = request.POST.get('descripcion')
-        precio = request.POST.get('precio')
-        
+        descripcion = request.POST.get('descripcion')        
         errores = []
         
         if not nombre:
             errores.append("El nombre es obligatorio.")
         if not descripcion:
             errores.append("La descripción es obligatoria.")
-        if not precio:
-            errores.append("El precio es obligatorio.")
-        else:
-            try:
-                precio = float(precio)
-                if precio < 0:
-                    errores.append("El precio no puede ser negativo.")
-            except ValueError:
-                errores.append("El precio debe ser un número válido.")
         
         if errores:
             for error in errores:
@@ -201,7 +191,6 @@ def reg_servicios(request):
         nuevo_servicio = Servicio(
             nombre=nombre,
             descripcion=descripcion,
-            precio=precio
         )
         nuevo_servicio.save()
         messages.success(request, 'Servicio registrado exitosamente.')
@@ -270,3 +259,60 @@ def eliminar_item_carrito(request, item_id):
     else:
         messages.error(request, "Acción no permitida.")
     return redirect('carrito')
+
+def cotizaciones_view(request):
+    if request.method == "POST":
+        departamento = request.POST.get("departamento")
+        ciudad = request.POST.get("ciudad")
+        fecha_servicio = request.POST.get("fecha_servicio")
+        hora_servicio = request.POST.get("hora_servicio")
+        direccion_servicio = request.POST.get("direccion_servicio")
+        especificaciones = request.POST.get("especificaciones", "")
+        fecha_servicio_date = parse_date(fecha_servicio)
+        current_date = datetime.now().date()
+        if not fecha_servicio_date or fecha_servicio_date < current_date:
+            messages.error(request, "La fecha del servicio no puede ser anterior a la fecha actual.")
+            return redirect("cotizaciones")
+        if (fecha_servicio_date - current_date).days < 4:
+            messages.error(request, "Debe seleccionar una fecha que permita al menos 3 días de preparación para alistar los materiales.")
+            return redirect("cotizaciones")
+
+        try:
+            hora_servicio_obj = datetime.strptime(hora_servicio, "%H:%M").time()
+        except ValueError:
+            messages.error(request, "Formato de hora inválido.")
+            return redirect("cotizaciones")
+        if hora_servicio_obj < time(8, 0) or hora_servicio_obj > time(19, 0):
+            messages.error(request, "La hora del servicio debe estar entre las 8:00 AM y las 7:00 PM.")
+            return redirect("cotizaciones")
+
+        service_id = request.POST.get("service_id")
+        if not service_id:
+            messages.error(request, "No se ha seleccionado un servicio.")
+            return redirect("inicio")
+        try:
+            servicio = Servicio.objects.get(pk=service_id)
+        except Servicio.DoesNotExist:
+            messages.error(request, "El servicio seleccionado no existe.")
+            return redirect("inicio")
+        
+        if not request.session.get("usuario_id"):
+            messages.error(request, "Debes iniciar sesión para solicitar una cotización.")
+            return redirect("login_clientes")
+        usuario = Usuario.objects.get(id=request.session["usuario_id"])
+
+        nueva_cotizacion = Cotizacion(
+            servicio=servicio,
+            usuario=usuario,
+            fecha_servicio=fecha_servicio,
+            hora_servicio=hora_servicio,
+            direccion_servicio=direccion_servicio,
+            departamento=departamento,
+            ciudad=ciudad,
+            especificaciones=especificaciones
+        )
+        nueva_cotizacion.save()
+        messages.success(request, "Su solicitud de cotización ha sido registrada exitosamente.")
+        return redirect("inicio")
+    else:
+        return render(request, "cotizaciones.html")

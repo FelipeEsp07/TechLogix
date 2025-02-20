@@ -13,24 +13,23 @@
       margin: 0;
       padding: 0;
     }
-    /* Header grande */
     header {
       background-color: #34495e;
       color: white;
       text-align: center;
-      padding: 80px 20px; /* Mayor padding para un header más grande */
+      padding: 80px 20px; 
       position: relative;
     }
     header h1 {
       margin: 0;
-      font-size: 3rem; /* Tamaño de fuente aumentado */
+      font-size: 3rem;
       font-weight: bold;
     }
     header p {
       margin: 10px 0 0;
-      font-size: 1.5rem; /* Fuente mayor */
+      font-size: 1.5rem; 
     }
-    /* Contenedor del Carrito */
+
     .cart-container {
       padding: 20px;
     }
@@ -54,7 +53,6 @@
     .cart-summary h5 {
       font-weight: bold;
     }
-    /* Botones */
     .btn-pagar {
       background-color: #597c80;
       border-color: #597c80;
@@ -72,7 +70,6 @@
       background-color: #c0392b;
       border-color: #c0392b;
     }
-    /* Footer */
     footer {
       background-color: #34495e;
       color: white;
@@ -89,10 +86,8 @@
     <p>Optimiza la gestión de tu negocio con nuestra plataforma tecnológica</p>
   </header>
   
-  <!-- Contenido del Carrito -->
   <div class="container cart-container">
     <div class="row">
-      <!-- Lista de Ítems del Carrito -->
       <div class="col-lg-8">
         <h2 class="mb-4">Tu Carrito</h2>
         {% if carrito and carrito.items.all %}
@@ -100,7 +95,7 @@
             <div class="row align-items-center cart-item">
               <div class="col-3 col-md-2">
                 {% if item.producto.imagen %}
-                  <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}">
+                  <img src="{#}" alt="{{ item.producto.nombre }}">
                 {% else %}
                   <img src="/static/path/to/default.jpg" alt="Sin imagen">
                 {% endif %}
@@ -114,7 +109,6 @@
               </div>
               <div class="col-6 col-md-3 text-end">
                 <h5>${{ item.subtotal|floatformat:2 }}</h5>
-                <!-- Botón para eliminar el producto del carrito -->
                 <form method="post" action="{% url 'eliminar_item_carrito' item.id %}">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-sm btn-eliminar mt-2">Eliminar</button>
@@ -126,7 +120,6 @@
           <p>No hay productos en el carrito.</p>
         {% endif %}
       </div>
-      <!-- Resumen del Carrito -->
       <div class="col-lg-4">
         <div class="cart-summary">
           <h5>Resumen del Pedido</h5>
