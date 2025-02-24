@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluar Cotización - Analista</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .info-section {
+      background: linear-gradient(135deg, #597c80, #597c80);
+      color: white;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+    .info-section h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    .info-section p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    .info-section .btn-signin {
+      background-color: transparent;
+      border: 2px solid white;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      text-transform: uppercase;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    .info-section .btn-signin:hover {
+      background-color: white;
+      color: #597c80;
+    }
+    .form-section {
+      background-color: white;
+      padding: 40px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .form-section h2 {
+      text-align: center;
+      color: #597c80;
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      margin-bottom: 5px;
+      display: block;
+      font-weight: 500;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: #597c80;
+      outline: none;
+    }
+    .btn-submit {
+      background-color: #597c80;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 30px;
+      text-transform: uppercase;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .btn-submit:hover {
+      background-color: #3d6064;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row no-gutters w-100">
+      <div class="col-md-6 info-section">
+        <h2>Evaluar Cotización</h2>
+        <p>Registra la evaluación tras la visita.</p>
+        <a class="btn-signin" href="{% url 'dash_analista' %}">Volver al Dashboard</a>
+      </div>
+      <div class="col-md-6 form-section">
+        <h2>Registrar Evaluación</h2>
+        <form action="{% url 'evaluar_cotizacion' cotizacion.id_cotizacion %}" method="POST">
+          {% csrf_token %}
+          <!-- Campos existentes -->
+          <div class="form-group">
+            <label for="insumos">Lista de Insumos</label>
+            <textarea id="insumos" name="insumos" rows="4" placeholder="Ingrese los insumos necesarios" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="observaciones">Observaciones / Comentarios Técnicos</label>
+            <textarea id="observaciones" name="observaciones" rows="4" placeholder="Ingrese observaciones adicionales"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="tiempo_estimado">Tiempo Estimado (horas)</label>
+            <input type="number" id="tiempo_estimado" name="tiempo_estimado" step="0.1" placeholder="Ingrese el tiempo estimado en horas" required>
+          </div>
+          <!-- Campos nuevos -->
+          <div class="form-group">
+            <label for="precio_mano_obra">Precio de Mano de Obra</label>
+            <input type="number" id="precio_mano_obra" name="precio_mano_obra" step="0.01" placeholder="Ej. 100.00" required>
+          </div>
+          <div class="form-group">
+            <label for="precio_insumos">Precio de Insumos</label>
+            <input type="number" id="precio_insumos" name="precio_insumos" step="0.01" placeholder="Ej. 200.00" required>
+          </div>
+          <div class="form-group">
+            <label for="precio_desplazamiento">Precio de Desplazamiento</label>
+            <input type="number" id="precio_desplazamiento" name="precio_desplazamiento" step="0.01" placeholder="Ej. 50.00" required>
+          </div>
+          <div class="form-group">
+            <label for="valor_total">Valor Total a Pagar</label>
+            <input type="number" id="valor_total" name="valor_total" step="0.01" placeholder="Ej. 350.00" required>
+          </div>
+          <div class="form-group">
+            <label for="fecha_servicio_programado">Fecha Programada del Servicio</label>
+            <input type="date" id="fecha_servicio_programado" name="fecha_servicio_programado" required>
+          </div>
+          <div class="form-group">
+            <label for="hora_servicio_programado">Hora Programada del Servicio</label>
+            <input type="time" id="hora_servicio_programado" name="hora_servicio_programado" required>
+          </div>
+          <button type="submit" class="btn-submit mt-4">Registrar Evaluación</button>
+          {% if messages %}
+            <div class="alert alert-danger mt-3">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

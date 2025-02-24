@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin - DistriRedes</title>
+  <title>Dashboard Analistas - DistriRedes</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -22,6 +22,7 @@
       color: white;
       text-align: center;
       padding: 80px 20px;
+      position: relative;
     }
     header h1 {
       margin: 0;
@@ -77,16 +78,36 @@
       transition: background-color 0.3s ease;
       color: white;
     }
-    .btn-rol { background-color: #007bff; }
-    .btn-rol:hover { background-color: #0069d9; }
-    .btn-empleado { background-color: #6c757d; }
-    .btn-empleado:hover { background-color: #5a6268; }
-    .btn-servicio { background-color: #28a745; }
-    .btn-servicio:hover { background-color: #218838; }
-    .btn-producto { background-color: #007bff; }
-    .btn-producto:hover { background-color: #0069d9; }
-    .btn-cotizaciones { background-color: #28a745; }
-    .btn-cotizaciones:hover { background-color: #218838; }
+    .btn-rol {
+      background-color: #007bff;
+    }
+    .btn-rol:hover {
+      background-color: #0069d9;
+    }
+    .btn-empleado {
+      background-color: #6c757d;
+    }
+    .btn-empleado:hover {
+      background-color: #5a6268;
+    }
+    .btn-servicio {
+      background-color: #28a745;
+    }
+    .btn-servicio:hover {
+      background-color: #218838;
+    }
+    .btn-producto {
+      background-color: #007bff;
+    }
+    .btn-producto:hover {
+      background-color: #0069d9;
+    }
+    .btn-cotizaciones {
+      background-color: #28a745;
+    }
+    .btn-cotizaciones:hover {
+      background-color: #218838;
+    }
   </style>
 </head>
 <body>
@@ -99,16 +120,12 @@
 
   <div class="container content">
     <div class="admin-header">
-      <h2>Panel Administrativo</h2>
+      <h2>Panel Analistas</h2>
       <p>Accede a las funcionalidades del sistema</p>
     </div>
     <div class="admin-buttons">
-      <a href="{% url 'crear_rol' %}" class="btn-admin btn-rol">Registrar Rol</a>
-      <a href="{% url 'reg_empleados' %}" class="btn-admin btn-empleado">Registrar Empleado</a>
-      <a href="{% url 'reg_servicios' %}" class="btn-admin btn-servicio">Registrar Servicio</a>
-      <a href="{% url 'reg_productos' %}" class="btn-admin btn-producto">Registrar Producto</a>
       <a href="{% url 'inicio' %}" class="btn-admin btn-producto">Ver catálogos</a>
-      <a href="{% url 'tablero' %}" class="btn-admin btn-cotizaciones">Ver Tablero de Cotizaciones</a>
+      <a href="{% url 'listar_visitas_programadas' %}" class="btn-admin btn-cotizaciones">Ver Visitas Programadas</a>
     </div>
   </div>
 

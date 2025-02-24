@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud de Cotización - TechLogix</title>
+    <title>Solicitud de Cotización - DistriRedes</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -12,14 +12,7 @@
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #f8f9fa;
-            height: 100vh;
             margin: 0;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
         .info-section {
             background: linear-gradient(135deg, #597c80, #597c80);
@@ -71,7 +64,8 @@
             font-weight: 600;
         }
         .form-section input,
-        .form-section textarea {
+        .form-section textarea,
+        .form-section select {
             margin-bottom: 15px;
             padding: 10px;
             border: 1px solid #ccc;
@@ -80,7 +74,8 @@
             font-family: 'Poppins', sans-serif;
         }
         .form-section input:focus,
-        .form-section textarea:focus {
+        .form-section textarea:focus,
+        .form-section select:focus {
             border-color: #597c80;
             outline: none;
         }
@@ -110,39 +105,61 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="row no-gutters">
-            <div class="col-md-6 info-section">
-                <h2>¡Bienvenido a TechLogix!</h2>
-                <p>Solicita una cotización para nuestro servicio y obtén una propuesta adaptada a tus necesidades.</p>
-                <a class="btn-signin" href="{% url 'inicio' %}">Volver al Inicio</a>
-            </div>
-            <div class="col-md-6 form-section">
-                <h2>Solicitud de Cotización</h2>
-                <form action="{% url 'cotizaciones' %}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="service_id" value="{{ request.GET.service_id }}">
-                    {% if messages %}
-                        <div class="alert alert-danger">
-                            {% for message in messages %}
-                                <p>{{ message }}</p>
+<body class="d-flex flex-column min-vh-100">
+    <main class="flex-fill d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row no-gutters">
+                <div class="col-md-6 info-section">
+                    <h2>¡Bienvenido a DistriRedes y Comunicación!</h2>
+                    <p>
+                        Para solicitar una cotización se debe realizar una cita previa para el estudio de insumos que se utilizarán. 
+                        Luego de esta cita se elaborará un presupuesto detallado. Este incluirá costos de materiales, mano de obra, 
+                        y tiempo estimado de instalación. Una vez aprobado el presupuesto, programaremos la fecha de instalación y 
+                        comenzaremos a trabajar para asegurar un servicio de alta calidad y satisfacción.
+                    </p>
+                    <a class="btn-signin" href="{% url 'inicio' %}">Volver al Inicio</a>
+                </div>
+                <div class="col-md-6 form-section">
+                    <h2>Solicitud de Cotización</h2>
+                    <form action="{% url 'cotizaciones' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="service_id" value="{{ request.GET.service_id }}">
+                        
+                        <label for="fecha_servicio">Fecha del servicio:</label>
+                        <input type="date" id="fecha_servicio" name="fecha_servicio" required>
+                        
+                        <label for="hora_servicio">Hora del servicio:</label>
+                        <select id="hora_servicio" name="hora_servicio" required>
+                            {% for slot in available_slots %}
+                                <option value="{{ slot }}">{{ slot }}</option>
                             {% endfor %}
-                        </div>
-                    {% endif %}
-                    
-                    <input type="text" id="departamento" name="departamento" placeholder="Departamento" required>
-                    <input type="text" id="ciudad" name="ciudad" placeholder="Ciudad" required>
-                    <input type="date" id="fecha_servicio" name="fecha_servicio" placeholder="Fecha del servicio" required>
-                    <input type="time" id="hora_servicio" name="hora_servicio" placeholder="Hora del servicio" required>
-                    <input type="text" id="direccion_servicio" name="direccion_servicio" placeholder="Dirección del servicio" required>
-                    <textarea id="especificaciones" name="especificaciones" placeholder="Especificaciones adicionales" rows="4"></textarea>
-                    <button type="submit" class="btn-submit mt-4">Solicitar Cotización</button>
-                </form>
+                        </select>
+                        
+                        <input type="text" id="departamento" name="departamento" placeholder="Departamento" required>
+                        <input type="text" id="ciudad" name="ciudad" placeholder="Ciudad" required>
+                        <input type="text" id="direccion_servicio" name="direccion_servicio" placeholder="Dirección del servicio" required>
+                        <textarea id="especificaciones" name="especificaciones" placeholder="Especificaciones adicionales" rows="4"></textarea>
+                        <button type="submit" class="btn-submit mt-4">Solicitar Cotización</button>
+                        
+                        {% if messages %}
+                            <div class="alert alert-danger mt-3">
+                                {% for message in messages %}
+                                    <p>{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
     
+    <!-- Footer -->
+    <footer class="mt-auto bg-dark text-white text-center py-3">
+        <p>&copy; 2024 DistriRedes - Todos los derechos reservados.</p>
+    </footer>
+    
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

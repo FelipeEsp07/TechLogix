@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Clientes - TechLogix</title>
+    <title>Registro de Clientes - DistriRedes y Comunicación</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -148,20 +148,17 @@
 
     <div class="container">
         <div class="row no-gutters">
-            <!-- Sección de información -->
             <div class="col-md-6 info-section">
-                <h2>¡Bienvenido a TechLogix!</h2>
+                <h2>¡Bienvenido a DistriRedes y Comunicación!</h2>
                 <p>Regístrate para acceder a nuestros servicios exclusivos y productos para el mantenimiento de tu hogar y empresa. Optimiza tu negocio, simplifica tu logística.</p>
                 <a class="btn-signin" href="{% url 'login_clientes' %}">Iniciar Sesión</a>
             </div>
 
-            <!-- Sección del formulario -->
             <div class="col-md-6 form-section">
                 <h2>Crear Cuenta</h2>
                 <form action="{% url 'reg_clientes' %}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
                     {% csrf_token %}
 
-                    <!-- Mensajes de error -->
                     {% if messages %}
                         <div class="alert alert-danger">
                             {% for message in messages %}
@@ -170,39 +167,20 @@
                         </div>
                     {% endif %}
 
-                    <!-- Nombre Completo -->
                     <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" required>
-
-                    <!-- Cédula -->
                     <input type="text" id="cedula" name="cedula" placeholder="Cédula" required>
-
-                    <!-- Teléfono -->
                     <input type="text" id="telefono" name="telefono" placeholder="Teléfono" required>
-
-                    <!-- Dirección -->
                     <input type="text" id="direccion" name="direccion" placeholder="Dirección" required>
-
-                    <!-- Correo Electrónico -->
                     <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
-
-                    <!-- Contraseña -->
                     <input type="password" id="contraseña" name="password" placeholder="Contraseña" required>
-
-                    <!-- Foto de Perfil (opcional) -->
                     <label for="foto" class="form-label">Foto de perfil (opcional)</label>
                     <input type="file" id="foto" name="foto" accept="image/*">
-
-                    <!-- Fecha de Nacimiento (opcional) -->
                     <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento (opcional)</label>
                     <input type="date" id="fecha_nacimiento" name="fecha_nacimiento">
-
-                    <!-- Aceptación de Términos y Condiciones -->
                     <div class="form-group checkbox-group">
                         <input type="checkbox" id="terminos" name="terminos" required>
                         <label for="terminos">Acepto los <a href="#">términos y condiciones</a></label>
                     </div>
-
-                    <!-- Botón de Registro -->
                     <button type="submit" class="btn-signup mt-4">Registrarse</button>
 
                     <p class="terms">Al registrarte, aceptas nuestros <a href="#">términos y condiciones</a>.</p>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro de Servicios - DistriRedes y Comunicación</title>
+  <title>Registro de Rol - TuAplicación</title>
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Google Fonts -->
@@ -42,7 +42,7 @@
       font-size: 1rem;
       margin-bottom: 20px;
     }
-    .info-section .btn-signin {
+    .info-section .btn-back {
       background-color: transparent;
       border: 2px solid white;
       color: white;
@@ -52,7 +52,7 @@
       font-size: 14px;
       transition: all 0.3s;
     }
-    .info-section .btn-signin:hover {
+    .info-section .btn-back:hover {
       background-color: white;
       color: #597c80;
     }
@@ -70,8 +70,7 @@
       font-size: 1.8rem;
       font-weight: 600;
     }
-    .form-section input,
-    .form-section textarea {
+    .form-section input {
       margin-bottom: 15px;
       padding: 10px;
       border: 1px solid #ccc;
@@ -79,12 +78,11 @@
       width: 100%;
       font-family: 'Poppins', sans-serif;
     }
-    .form-section input:focus,
-    .form-section textarea:focus {
+    .form-section input:focus {
       border-color: #597c80;
       outline: none;
     }
-    .form-section .btn-signup {
+    .form-section .btn-submit {
       background-color: #597c80;
       color: white;
       padding: 10px;
@@ -95,7 +93,7 @@
       font-size: 14px;
       transition: background-color 0.3s;
     }
-    .form-section .btn-signup:hover {
+    .form-section .btn-submit:hover {
       background-color: #3d6064;
     }
     @media (max-width: 768px) {
@@ -110,30 +108,20 @@
     <div class="row no-gutters">
       <div class="col-md-6 info-section">
         <h2>¡Bienvenido a DistriRedes y Comunicación!</h2>
-        <p>Registra un nuevo servicio para ampliar tu catálogo y ofrecer opciones de cotización a tus clientes.</p>
-        <a class="btn-signin" href="{% url 'dashboard_admin' %}">Volver al Inicio</a>
+        <p>Registra un nuevo rol en el sistema</p>
+        <a class="btn-back" href="{% url 'dashboard_admin' %}">Volver</a>
       </div>
       <div class="col-md-6 form-section">
-        <h2>Registro de Servicio</h2>
-        <form action="{% url 'reg_servicios' %}" method="POST" enctype="multipart/form-data">
+        <h2>Crear Rol</h2>
+        <form action="{% url 'crear_rol' %}" method="POST">
           {% csrf_token %}
-          
-          {% if messages %}
-            <div class="alert alert-danger">
-              {% for message in messages %}
-                <p>{{ message }}</p>
-              {% endfor %}
-            </div>
-          {% endif %}
-          <input type="text" id="nombre" name="nombre" placeholder="Nombre del servicio" required>     
-          <textarea id="descripcion" name="descripcion" placeholder="Descripción del servicio" rows="4" required></textarea>
-          <label for="imagen">Selecciona una imagen:</label>
-          <input type="file" id="imagen" name="imagen">       
-          <button type="submit" class="btn-signup mt-4">Registrar Servicio</button>
+          <input type="text" id="nombre" name="nombre" placeholder="Nombre del rol" required>
+          <button type="submit" class="btn-submit mt-4">Registrar Rol</button>
         </form>
       </div>
     </div>
   </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recibo de Cotización - DistriRedes</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+   <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+    }
+    .wrapper {
+      flex: 1;
+    }
+    .hero {
+      background-color: #34495e;
+      color: white;
+      padding: 60px 0;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .footer {
+      background-color: #34495e;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+    .receipt {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px 30px;
+      border: 2px dashed #34495e;
+      border-radius: 8px;
+    }
+    .receipt h2 {
+      text-align: center;
+      color: #34495e;
+      margin-bottom: 20px;
+    }
+    .receipt .line {
+      border-bottom: 1px dashed #ccc;
+      margin: 15px 0;
+    }
+    .receipt .detail {
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    .receipt .detail span {
+      float: right;
+    }
+    .btn-confirm {
+      background-color: #34495e;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      text-transform: uppercase;
+      font-size: 14px;
+      padding: 10px 20px;
+      transition: background-color 0.3s ease;
+    }
+    .btn-confirm:hover {
+      background-color: #2d3e50;
+    }
+    .btn-cancel {
+      background-color: white;
+      color: #34495e;
+      border: 2px solid #34495e;
+      border-radius: 30px;
+      text-transform: uppercase;
+      font-size: 14px;
+      padding: 10px 20px;
+      transition: background-color 0.3s ease;
+    }
+    .btn-cancel:hover {
+      background-color: #34495e;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <section class="hero">
+      <h1>DistriRedes y Comunicación</h1>
+      <p>Optimiza la gestión de tu negocio con nuestra plataforma tecnológica</p>
+    </section>
+
+    <div class="container my-5">
+      <div class="receipt">
+        <h2>Recibo de Cotización</h2>
+        <div class="line"></div>
+        <p class="detail"><strong>ID Cotización:</strong> <span>{{ cotizacion.id_cotizacion }}</span></p>
+        <p class="detail"><strong>Cliente:</strong> <span>{{ cotizacion.usuario.nombre }}</span></p>
+        <p class="detail"><strong>Servicio:</strong> <span>{{ cotizacion.servicio.nombre }}</span></p>
+        <div class="line"></div>
+        <p class="detail"><strong>Mano de Obra:</strong> <span>$ {{ evaluacion.precio_mano_obra }}</span></p>
+        <p class="detail"><strong>Precio de Insumos:</strong> <span>$ {{ evaluacion.precio_insumos }}</span></p>
+        <p class="detail"><strong>Desplazamiento:</strong> <span>$ {{ evaluacion.precio_desplazamiento }}</span></p>
+        <div class="line"></div>
+        <p class="detail"><strong>Valor Total a Pagar:</strong> <span>$ {{ evaluacion.valor_total }}</span></p>
+        <div class="line"></div>
+        <p class="detail"><strong>Fecha Programada del Servicio:</strong> <span>{{ evaluacion.fecha_servicio_programado|date:"d/m/Y" }}</span></p>
+        <p class="detail"><strong>Hora Programada del Servicio:</strong> <span>{{ evaluacion.hora_servicio_programado|time:"H:i" }}</span></p>
+        <div class="line"></div>
+        <p class="detail"><strong>Dirección:</strong> <span>{{ cotizacion.direccion_servicio }}</span></p>
+      </div>
+      <div class="text-center my-4">
+        <a class="btn btn-primary" href="{% url 'inicio' %}">Volver al Inicio</a>
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 DistriRedes y Comunicación - Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

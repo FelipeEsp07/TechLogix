@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Visitas Programadas - DistriRedes</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+    }
+    .wrapper {
+      flex: 1;
+    }
+    .header-container {
+      background-color: #34495e;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    .header-container a {
+      color: white;
+      text-decoration: none;
+      margin-right: 15px;
+    }
+    .header-container a:hover {
+      text-decoration: underline;
+    }
+    .container-main {
+      padding: 20px;
+    }
+    .footer {
+      background-color: #34495e;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+    table {
+      background-color: white;
+    }
+    table th, table td {
+      vertical-align: middle !important;
+    }
+    .btn-evaluar {
+      background-color: #597c80;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size: 14px;
+      border-radius: 5px;
+    }
+    .btn-evaluar:hover {
+      background-color: #3d6064;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header class="header-container">
+      <div class="logo">
+        <h1 style="font-size: 24px;">DistriRedes y Comunicación</h1>
+      </div>
+      <nav>
+        <a href="{% url 'inicio' %}">Inicio</a>
+        <a href="{% url 'dash_analista' %}">Dashboard</a>
+      </nav>
+    </header>
+
+    <div class="container container-main">
+      <h2 class="mb-4">Visitas Programadas</h2>
+      
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-info">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+      
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Cédula</th>
+            <th>Servicio</th>
+            <th>Departamento</th>
+            <th>Ciudad</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for visita in visitas %}
+            <tr>
+              <td>{{ visita.usuario.nombre }}</td>
+              <td>{{ visita.usuario.cedula }}</td>
+              <td>{{ visita.servicio.nombre }}</td>
+              <td>{{ visita.departamento }}</td>
+              <td>{{ visita.ciudad }}</td>
+              <td>{{ visita.direccion_servicio }}</td>
+              <td>{{ visita.usuario.telefono }}</td>
+              <td>
+                <a href="{% url 'evaluar_cotizacion' visita.id_cotizacion %}" class="btn-evaluar">Evaluar</a>
+              </td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">No hay visitas programadas.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2024 DistriRedes y Comunicación - Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
